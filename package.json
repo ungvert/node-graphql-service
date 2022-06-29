@@ -1,0 +1,45 @@
+{
+  "name": "graphql-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/main.ts",
+  "type": "module",
+  "engines": {
+    "node": ">=16.15.0"
+  },
+  "scripts": {
+    "start": "npm run build && node ./dist/main.js",
+    "build": "tsc",
+    "start:dev": "nodemon ./src/main.ts",
+    "test": "vitest run",
+    "test:coverage": "vitest --coverage",
+    "test:watch": "vitest watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ungvert/node-graphql-service.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ungvert/node-graphql-service/issues"
+  },
+  "homepage": "https://github.com/ungvert/node-graphql-service#readme",
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/supertest": "^2.0.12",
+    "dotenv": "^16.0.1",
+    "nodemon": "^2.0.18",
+    "supertest": "^6.2.3",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.4",
+    "vitest": "^0.16.0"
+  },
+  "dependencies": {
+    "apollo-server-core": "^3.9.0",
+    "apollo-server-express": "^3.9.0",
+    "express": "^4.18.1",
+    "graphql": "^16.5.0"
+  }
+}
