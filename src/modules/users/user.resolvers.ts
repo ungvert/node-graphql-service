@@ -1,5 +1,6 @@
 import { GraphQLResolveInfo } from "graphql";
-import { AppContext } from "../../server.js";
+import { renameId } from "../../common/fields-renaming.js";
+import { AppContext } from "../app.module.js";
 
 export interface RegisterUserArgs {
   firstName: string;
@@ -13,34 +14,29 @@ export interface LoginUserArgs {
   email: string;
 }
 
+export interface GetUserArgs {
+  id: string;
+}
+
+const renameResolvers = {
+  User: {
+    id: renameId,
+  },
+};
+
 export const userResolvers = {
   Query: {
-    // user(
-    //   parent: undefined,
-    //   args: RegisterUserArgs,
-    //   context: AppContext,
-    //   info: GraphQLResolveInfo
-    // ) {
-    //   //   return context.userService.createUser(args.);
-    //   return {};
-    // },
-    jwt(
-      parent: undefined,
-      args: RegisterUserArgs,
-      { dataSources }: AppContext,
-      info: GraphQLResolveInfo
-    ) {
+    user(_: undefined, args: GetUserArgs, { dataSources }: AppContext) {
+      return dataSources.usersAPI.getOne(args);
+    },
+    jwt(_: undefined, args: RegisterUserArgs, { dataSources }: AppContext) {
       return dataSources.usersAPI.login(args);
     },
   },
   Mutation: {
-    register(
-      parent: undefined,
-      args: RegisterUserArgs,
-      { dataSources }: AppContext,
-      info: GraphQLResolveInfo
-    ) {
+    register(_: undefined, args: RegisterUserArgs, { dataSources }: AppContext) {
       return dataSources.usersAPI.register(args);
     },
   },
+  ...renameResolvers,
 };

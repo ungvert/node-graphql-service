@@ -1,30 +1,31 @@
-import { LoginUserArgs, RegisterUserArgs } from "./user.resolvers.js";
-import { RequestOptions, RESTDataSource } from "apollo-datasource-rest";
+import { GetUserArgs, LoginUserArgs, RegisterUserArgs } from "./user.resolvers.js";
+import { RESTDataSourceWithAuth } from "../../common/data-source-with-auth.js";
 import "dotenv/config";
 
 export interface UserService {
-  register(userDto: RegisterUserArgs): Promise<boolean>;
-  login(userDto: LoginUserArgs): Promise<string>;
+  register(userDto: RegisterUserArgs): Promise<unknown>;
+  login(userDto: LoginUserArgs): Promise<unknown>;
+  getOne(userDto: GetUserArgs): Promise<unknown>;
 }
 
-export class UsersAPI extends RESTDataSource implements UserService {
+export class UsersAPI extends RESTDataSourceWithAuth implements UserService {
   constructor() {
     super();
     this.baseURL = process.env.users_url || "http://localhost:3004/v1/users";
   }
 
-  willSendRequest(request: RequestOptions) {
-    request.headers.set("Authorization", `Bearer ${this.context.token}`);
-  }
-
   async register(userDto: RegisterUserArgs) {
     const data = await this.post(`/register`, userDto);
-    data.id = data._id;
     return data;
   }
 
   async login(userDto: LoginUserArgs) {
     const data = await this.post(`/login`, userDto);
     return data.jwt;
+  }
+
+  async getOne({ id }: GetUserArgs) {
+    const data = await this.get(`/${id}`);
+    return data;
   }
 }
