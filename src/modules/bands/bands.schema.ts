@@ -7,7 +7,7 @@ export const bandsTypeDefs = gql`
     origin: String
     members: [Member]
     website: String
-    genres: String
+    genres: [Genre]
   }
 
   type Member {
@@ -28,26 +28,26 @@ export const bandsTypeDefs = gql`
   }
 
   input CreateBandInput {
-    name: String
-    origin: String
-    members: [MemberInput]
-    website: String
-    genres: String
+    name: String!
+    origin: String!
+    members: [MemberInput!]!
+    website: String!
+    genresIds: [ID!]
   }
 
   input UpdateBandInput {
     id: ID!
-    name: String
-    origin: String
-    members: [MemberInput]
-    website: String
-    genres: String
+    name: String!
+    origin: String!
+    members: [MemberInput!]!
+    website: String!
+    genresIds: [ID!]
   }
 
   input MemberInput {
-    name: String
-    instrument: String
-    years: [String]
+    name: String!
+    instrument: String!
+    years: [String!]!
   }
 
   type DeleteBandResponce {

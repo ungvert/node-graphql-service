@@ -31,9 +31,7 @@ export class GenresAPI extends RESTDataSourceWithAuth implements GenresService {
   }
 
   async create({ genre }: CreateGenreInputArgs) {
-    console.log("genre", genre);
     const data = await this.post(`/`, genre);
-    console.log("data", data);
     return data;
   }
   async update({ genre }: UpdateGenreInputArgs) {

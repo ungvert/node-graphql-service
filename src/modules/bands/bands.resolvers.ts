@@ -11,7 +11,7 @@ export interface CreateBandInputArgs {
     origin: string;
     members: Member[];
     website: string;
-    genres: string;
+    genres: string[];
   };
 }
 
@@ -22,7 +22,7 @@ export interface UpdateBandInputArgs {
     origin: string;
     members: Member[];
     website: string;
-    genres: string;
+    genres: string[];
   };
 }
 
@@ -36,13 +36,13 @@ type Member = {
   years: string[];
 };
 
-const renameResolvers = {
+export const bandsResolvers = {
   Band: {
     id: renameId,
+    genres(parent: any, _: undefined, { dataSources }: AppContext) {
+      return parent.genresIds.map((id: string) => dataSources.genresAPI.getOne(id));
+    },
   },
-};
-
-export const bandsResolvers = {
   Query: {
     bands(_: undefined, __: undefined, { dataSources }: AppContext) {
       return dataSources.bandsAPI.getAll();
@@ -62,5 +62,4 @@ export const bandsResolvers = {
       return dataSources.bandsAPI.remove(args);
     },
   },
-  ...renameResolvers,
 };

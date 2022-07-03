@@ -9,6 +9,7 @@ import {
 
 describe("User", () => {
   let userId: string;
+
   it("registers user", async () => {
     const response = await registerTestUser();
     userId = response?.data?.register?.id;
