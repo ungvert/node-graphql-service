@@ -42,7 +42,7 @@ const renameResolvers = {
   },
 };
 
-export const resolvers = {
+export const bandsResolvers = {
   Query: {
     bands(_: undefined, __: undefined, { dataSources }: AppContext) {
       return dataSources.bandsAPI.getAll();
