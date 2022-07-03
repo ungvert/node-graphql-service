@@ -15,17 +15,22 @@ describe("Genres module", () => {
         gql`
           query Genres {
             genres {
-              id
-              name
-              description
-              country
-              year
+              items {
+                id
+                name
+                description
+                country
+                year
+              }
+              limit
+              offset
+              total
             }
           }
         `
       );
-      const genres = response?.data?.genres;
-      const errors = response.errors;
+      const genres = response?.data?.genres?.items;
+      const errors = response?.errors;
       expect(errors).toBeFalsy();
       expect(genres).toBeTruthy();
 

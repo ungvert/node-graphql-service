@@ -9,9 +9,16 @@ export const genresTypeDefs = gql`
     year: Int
   }
 
+  type GenresWithPagination {
+    items: [Genre]
+    limit: Int
+    offset: Int
+    total: Int
+  }
+
   type Query {
     genre(id: ID!): Genre
-    genres: [Genre]
+    genres(limit: Int, offset: Int): GenresWithPagination
   }
 
   type Mutation {

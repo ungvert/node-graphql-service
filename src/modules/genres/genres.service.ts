@@ -6,10 +6,11 @@ import {
   GenreId,
   UpdateGenreInputArgs,
 } from "./genres.resolvers.js";
+import { PaginationArgs } from "../../common/pagination.js";
 
 export interface GenresService {
   getOne(id: GenreId): Promise<unknown>;
-  getAll(): Promise<unknown>;
+  getAll(args: PaginationArgs): Promise<unknown>;
   create(args: CreateGenreInputArgs): Promise<unknown>;
   update(args: UpdateGenreInputArgs): Promise<unknown>;
   remove(id: GenreId): Promise<unknown>;
@@ -21,9 +22,12 @@ export class GenresAPI extends RESTDataSourceWithAuth implements GenresService {
     this.baseURL = process.env.genres_url || "http://localhost:3001/v1/genres";
   }
 
-  async getAll() {
-    const data = await this.get(`/`);
-    return data.items;
+  async getAll({ limit, offset }: PaginationArgs) {
+    const data = await this.get(`/`, {
+      ...(limit ? { limit } : {}),
+      ...(offset ? { offset } : {}),
+    });
+    return data;
   }
   async getOne(id: GenreId) {
     const data = await this.get(`/${id}`);
