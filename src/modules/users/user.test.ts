@@ -5,7 +5,7 @@ import {
   registerTestUser,
   sendTestRequest,
   testUser,
-} from "../../testUtils.js";
+} from "../../common/test-utils.js";
 
 describe("User", () => {
   let userId: string;

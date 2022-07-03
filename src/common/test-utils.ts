@@ -1,7 +1,7 @@
 import { gql } from "apollo-server-express";
 import { DocumentNode, print } from "graphql";
 import request from "supertest";
-import { createServer } from "./server.js";
+import { createServer } from "../server.js";
 
 let cachedServer: any;
 export let cachedJwt: any;

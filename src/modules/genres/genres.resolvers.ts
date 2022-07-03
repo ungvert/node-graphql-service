@@ -1,5 +1,5 @@
 import { renameId } from "../../common/fields-renaming.js";
-import { PaginationArgs } from "../../common/pagination.js";
+import { PaginationArgs } from "../../common/resolver-args.js";
 import { AppContext } from "../app.module.js";
 
 export interface Genre {
@@ -23,13 +23,10 @@ export interface GetGenreByIdArgs {
   id: GenreId;
 }
 
-const renameResolvers = {
+export const genresResolvers = {
   Genre: {
     id: renameId,
   },
-};
-
-export const genresResolvers = {
   Query: {
     genres(_: undefined, args: PaginationArgs, { dataSources }: AppContext) {
       return dataSources.genresAPI.getAll(args);
@@ -49,5 +46,4 @@ export const genresResolvers = {
       return dataSources.genresAPI.remove(id);
     },
   },
-  ...renameResolvers,
 };

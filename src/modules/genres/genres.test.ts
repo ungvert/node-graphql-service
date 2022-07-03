@@ -5,7 +5,7 @@ import {
   loginTestUser,
   registerTestUser,
   sendTestRequest,
-} from "../../testUtils.js";
+} from "../../common/test-utils.js";
 
 describe("Genres module", () => {
   describe("without auth", () => {
@@ -100,7 +100,7 @@ describe("Genres module", () => {
     });
 
     it("updates genre", async () => {
-      const updatedGenre = { ...testGenre, name: "udpated" };
+      const updatedGenre = { ...testGenre, name: "updated" };
 
       const response = await sendTestRequest(
         gql`

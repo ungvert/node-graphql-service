@@ -18,13 +18,10 @@ export interface GetUserArgs {
   id: string;
 }
 
-const renameResolvers = {
+export const userResolvers = {
   User: {
     id: renameId,
   },
-};
-
-export const userResolvers = {
   Query: {
     user(_: undefined, args: GetUserArgs, { dataSources }: AppContext) {
       return dataSources.usersAPI.getOne(args);
@@ -38,5 +35,4 @@ export const userResolvers = {
       return dataSources.usersAPI.register(args);
     },
   },
-  ...renameResolvers,
 };

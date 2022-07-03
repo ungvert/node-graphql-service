@@ -6,7 +6,7 @@ import {
   GenreId,
   UpdateGenreInputArgs,
 } from "./genres.resolvers.js";
-import { PaginationArgs } from "../../common/pagination.js";
+import { PaginationArgs } from "../../common/resolver-args.js";
 
 export interface GenresService {
   getOne(id: GenreId): Promise<unknown>;

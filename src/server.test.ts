@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { sendTestRequest } from "./testUtils.js";
+import { sendTestRequest } from "./common/test-utils.js";
 import { gql } from "apollo-server-express";
 
 describe("server", () => {
