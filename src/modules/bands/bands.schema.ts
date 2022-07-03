@@ -16,9 +16,16 @@ export const bandsTypeDefs = gql`
     years: [String]
   }
 
+  type BandsWithPagination {
+    items: [Band]
+    limit: Int
+    offset: Int
+    total: Int
+  }
+
   type Query {
     band(id: ID!): Band
-    bands: [Band]
+    bands(limit: Int, offset: Int): BandsWithPagination
   }
 
   type Mutation {

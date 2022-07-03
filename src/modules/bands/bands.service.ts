@@ -6,10 +6,11 @@ import {
   DeleteBandInputArgs,
   UpdateBandInputArgs,
 } from "./bands.resolvers.js";
+import { PaginationArgs } from "../../common/resolver-args.js";
 
 export interface BandsService {
   getOne(id: string): Promise<unknown>;
-  getAll(): Promise<unknown>;
+  getAll(args: PaginationArgs): Promise<unknown>;
   create(args: CreateBandInputArgs): Promise<unknown>;
   update(args: UpdateBandInputArgs): Promise<unknown>;
   remove(args: DeleteBandInputArgs): Promise<unknown>;
@@ -21,9 +22,12 @@ export class BandsAPI extends RESTDataSourceWithAuth implements BandsService {
     this.baseURL = process.env.bands_url || "http://localhost:3003/v1/bands";
   }
 
-  async getAll() {
-    const data = await this.get(`/`);
-    return data.items;
+  async getAll({ limit, offset }: PaginationArgs) {
+    const data = await this.get(`/`, {
+      ...(limit ? { limit } : {}),
+      ...(offset ? { offset } : {}),
+    });
+    return data;
   }
   async getOne(id: string) {
     const data = await this.get(`/${id}`);

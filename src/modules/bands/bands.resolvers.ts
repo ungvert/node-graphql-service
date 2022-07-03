@@ -1,4 +1,5 @@
 import { renameId } from "../../common/fields-renaming.js";
+import { PaginationArgs } from "../../common/resolver-args.js";
 import { AppContext } from "../app.module.js";
 
 export interface GetBandByIdArgs {
@@ -44,8 +45,8 @@ export const bandsResolvers = {
     },
   },
   Query: {
-    bands(_: undefined, __: undefined, { dataSources }: AppContext) {
-      return dataSources.bandsAPI.getAll();
+    bands(_: undefined, args: PaginationArgs, { dataSources }: AppContext) {
+      return dataSources.bandsAPI.getAll(args);
     },
     band(_: undefined, { id }: GetBandByIdArgs, { dataSources }: AppContext) {
       return dataSources.bandsAPI.getOne(id);
