@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { gql } from "apollo-server-express";
+import { sendTestRequest } from "../../test-utils/send-test-request.js";
 import {
   loginTestUser,
   registerTestUser,
-  sendTestRequest,
   testUser,
-} from "../../common/test-utils.js";
+} from "../../test-utils/create-test-data/create-test-user";
 
 describe("User", () => {
   let userId: string;

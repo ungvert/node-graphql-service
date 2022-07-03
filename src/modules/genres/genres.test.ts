@@ -1,11 +1,15 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { gql } from "apollo-server-express";
+import { sendTestRequest } from "../../test-utils/send-test-request.js";
 import {
   cachedJwt,
   loginTestUser,
   registerTestUser,
-  sendTestRequest,
-} from "../../common/test-utils.js";
+} from "../../test-utils/create-test-data/create-test-user";
+import {
+  createTestGenre,
+  testGenre,
+} from "../../test-utils/create-test-data/create-test-genre.js";
 
 describe("Genres module", () => {
   describe("without auth", () => {
@@ -60,6 +64,7 @@ describe("Genres module", () => {
   });
 
   describe("with auth", () => {
+    let genreId: string;
     beforeAll(async () => {
       if (!cachedJwt) {
         await registerTestUser();
@@ -67,40 +72,17 @@ describe("Genres module", () => {
       }
     });
 
-    const testGenre = {
-      name: "Post-punk",
-      description:
-        "Style of rock music inspired by punk but less aggressive in performance and musically more experimental.",
-      country: "United Kingdom",
-      year: 1978,
-      id: undefined,
-    };
-
     it("creates genre", async () => {
-      const response = await sendTestRequest(
-        gql`
-          mutation CreateGenre($genre: CreateGenreInput!) {
-            createGenre(genre: $genre) {
-              id
-              name
-              description
-              country
-              year
-            }
-          }
-        `,
-        { variables: { genre: testGenre }, headers: { Authorization: cachedJwt } }
-      );
+      const response = await createTestGenre();
       const genre = response?.data?.createGenre;
       const errors = response.errors;
       expect(errors).toBeFalsy();
-      const genreId = genre.id;
+      genreId = genre.id;
       expect(genreId).toBeTruthy();
-      testGenre.id = genreId;
     });
 
     it("updates genre", async () => {
-      const updatedGenre = { ...testGenre, name: "updated" };
+      const updatedGenre = { ...testGenre, id: genreId, name: "updated" };
 
       const response = await sendTestRequest(
         gql`
@@ -133,7 +115,7 @@ describe("Genres module", () => {
           }
         `,
         {
-          variables: { deleteGenreId: testGenre.id },
+          variables: { deleteGenreId: genreId },
           headers: { Authorization: cachedJwt },
         }
       );
