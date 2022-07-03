@@ -1,5 +1,5 @@
 import { renameId } from "../../common/fields-renaming.js";
-import { PaginationArgs } from "../../common/resolver-args.js";
+import { PaginationArgs, WithoutId } from "../../common/resolver-args.js";
 import { AppContext } from "../app.module.js";
 
 export interface Genre {
@@ -12,7 +12,7 @@ export interface Genre {
 export type GenreId = Genre["id"];
 
 export interface CreateGenreInputArgs {
-  genre: Omit<Genre, "id">;
+  genre: WithoutId<Genre>;
 }
 
 export interface UpdateGenreInputArgs {

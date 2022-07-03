@@ -1,5 +1,5 @@
 import { renameId } from "../../common/fields-renaming.js";
-import { PaginationArgs } from "../../common/resolver-args.js";
+import { PaginationArgs, WithoutId } from "../../common/resolver-args.js";
 import { AppContext } from "../app.module.js";
 
 export interface GetBandByIdArgs {
@@ -7,28 +7,24 @@ export interface GetBandByIdArgs {
 }
 
 export interface CreateBandInputArgs {
-  band: {
-    name: string;
-    origin: string;
-    members: Member[];
-    website: string;
-    genres: string[];
-  };
+  band: WithoutId<Band>;
 }
 
 export interface UpdateBandInputArgs {
-  band: {
-    id: string;
-    name: string;
-    origin: string;
-    members: Member[];
-    website: string;
-    genres: string[];
-  };
+  band: Band;
 }
 
 export interface DeleteBandInputArgs {
   id: string;
+}
+
+export interface Band {
+  id: string;
+  name: string;
+  origin: string;
+  members: Member[];
+  website: string;
+  genres: string[];
 }
 
 type Member = {
