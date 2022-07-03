@@ -16,11 +16,16 @@ import { artistsTypeDefs } from "./artists/artists.schema.js";
 import { artistsResolvers } from "./artists/artists.resolvers.js";
 import { ArtistsAPI, ArtistsService } from "./artists/artists.service.js";
 
+import { albumsTypeDefs } from "./albums/albums.schema.js";
+import { albumsResolvers } from "./albums/albums.resolvers.js";
+import { AlbumsAPI, AlbumsService } from "./albums/albums.service.js";
+
 export const typeDefs = mergeTypeDefs([
   userTypeDefs,
   genresTypeDefs,
   bandsTypeDefs,
   artistsTypeDefs,
+  albumsTypeDefs,
 ]);
 
 export const resolvers = mergeResolvers([
@@ -28,6 +33,7 @@ export const resolvers = mergeResolvers([
   genresResolvers,
   bandsResolvers,
   artistsResolvers,
+  albumsResolvers,
 ]);
 
 export interface AppContext {
@@ -37,6 +43,7 @@ export interface AppContext {
     bandsAPI: BandsService;
     genresAPI: GenresService;
     artistsAPI: ArtistsService;
+    albumsAPI: AlbumsService;
   };
 }
 
@@ -45,4 +52,5 @@ export const dataSources = () => ({
   bandsAPI: new BandsAPI(),
   genresAPI: new GenresAPI(),
   artistsAPI: new ArtistsAPI(),
+  albumsAPI: new AlbumsAPI(),
 });
