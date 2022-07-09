@@ -7,7 +7,7 @@ export const albumsTypeDefs = gql`
     released: Int
     artists: [Artist]
     bands: [Band]
-    # tracks: [Track]
+    tracks: [Track]
     genres: [Genre]
     image: String
   }
@@ -35,7 +35,7 @@ export const albumsTypeDefs = gql`
     released: Int
     artistsIds: [ID!]
     bandsIds: [ID!]
-    tracksIds: [ID!]
+    trackIds: [ID!]
     genresIds: [ID!]
     image: String
   }
@@ -46,7 +46,7 @@ export const albumsTypeDefs = gql`
     released: Int
     artistsIds: [ID!]
     bandsIds: [ID!]
-    tracksIds: [ID!]
+    trackIds: [ID!]
     genresIds: [ID!]
     image: String
   }

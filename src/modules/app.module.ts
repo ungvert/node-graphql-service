@@ -24,6 +24,10 @@ import { tracksTypeDefs } from "./tracks/tracks.schema.js";
 import { tracksResolvers } from "./tracks/tracks.resolvers.js";
 import { TracksAPI, TracksService } from "./tracks/tracks.service.js";
 
+import { favouritesTypeDefs } from "./favourites/favourites.schema.js";
+import { favouritesResolvers } from "./favourites/favourites.resolvers.js";
+import { FavouritesAPI, FavouritesService } from "./favourites/favourites.service.js";
+
 export const typeDefs = mergeTypeDefs([
   userTypeDefs,
   genresTypeDefs,
@@ -31,6 +35,7 @@ export const typeDefs = mergeTypeDefs([
   artistsTypeDefs,
   albumsTypeDefs,
   tracksTypeDefs,
+  favouritesTypeDefs,
 ]);
 
 export const resolvers = mergeResolvers([
@@ -40,6 +45,7 @@ export const resolvers = mergeResolvers([
   artistsResolvers,
   albumsResolvers,
   tracksResolvers,
+  favouritesResolvers,
 ]);
 
 export interface AppContext {
@@ -51,6 +57,7 @@ export interface AppContext {
     artistsAPI: ArtistsService;
     albumsAPI: AlbumsService;
     tracksAPI: TracksService;
+    favouritesAPI: FavouritesService;
   };
 }
 
@@ -61,4 +68,5 @@ export const dataSources = () => ({
   artistsAPI: new ArtistsAPI(),
   albumsAPI: new AlbumsAPI(),
   tracksAPI: new TracksAPI(),
+  favouritesAPI: new FavouritesAPI(),
 });

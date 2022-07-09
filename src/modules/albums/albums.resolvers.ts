@@ -4,6 +4,7 @@ import { AppContext } from "../app.module.js";
 import { Artist } from "../artists/artists.resolvers.js";
 import { Band } from "../bands/bands.resolvers.js";
 import { Genre } from "../genres/genres.resolvers.js";
+import { Track } from "../tracks/tracks.resolvers.js";
 
 export interface GetAlbumByIdArgs {
   id: string;
@@ -23,7 +24,7 @@ export interface Album {
   released: number;
   artists: Artist[];
   bands: Band[];
-  // tracks: [Track]
+  tracks: Track[];
   genres: Genre[];
   image: String;
 }
@@ -43,6 +44,9 @@ export const albumsResolvers = {
     },
     genres(parent: any, _: undefined, { dataSources }: AppContext) {
       return parent.genresIds.map((id: string) => dataSources.genresAPI.getOne(id));
+    },
+    tracks(parent: any, _: undefined, { dataSources }: AppContext) {
+      return parent.trackIds.map((id: string) => dataSources.tracksAPI.getOne(id));
     },
   },
   Query: {
