@@ -44,7 +44,7 @@ describe("Albums module", () => {
     await removeTestArtist(input.artistsIds[0]);
   });
 
-  it("creates artist", async () => {
+  it("creates album", async () => {
     const [data, errors] = await createTestAlbum(input);
     expect(errors).toBe(undefined);
     const id = data?.id;
@@ -52,7 +52,7 @@ describe("Albums module", () => {
     input.id = id;
   });
 
-  it("updates band", async () => {
+  it("updates album", async () => {
     const updatedName = "updated";
     const updatedInput = { ...input, name: updatedName };
 
@@ -107,7 +107,7 @@ describe("Albums module", () => {
   });
 
   describe("without auth", () => {
-    it("gets artists", async () => {
+    it("gets albums", async () => {
       const response = await sendTestRequest(
         gql`
           query Albums($limit: Int, $offset: Int) {
@@ -175,7 +175,7 @@ describe("Albums module", () => {
       expect(items).toBeTruthy();
       expect(items[0].id).toBeTruthy();
     });
-    it("gets band by Id", async () => {
+    it("gets album by Id", async () => {
       const response = await sendTestRequest(
         gql`
           query Album($albumId: ID!) {
@@ -227,7 +227,7 @@ describe("Albums module", () => {
     });
   });
 
-  it("deletes band", async () => {
+  it("deletes album", async () => {
     const [data, errors] = await removeTestAlbum(input.id);
     expect(errors).toBe(undefined);
     expect(data.deletedCount).toBe(1);

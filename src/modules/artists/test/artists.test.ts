@@ -36,7 +36,7 @@ describe("Artists module", () => {
     input.id = id;
   });
 
-  it("updates band", async () => {
+  it("updates artist", async () => {
     const updatedName = "updated";
     const updatedInput = { ...input, firstName: updatedName };
 
@@ -140,7 +140,7 @@ describe("Artists module", () => {
       expect(artists).toBeTruthy();
       expect(artists[0].id).toBeTruthy();
     });
-    it("gets band by Id", async () => {
+    it("gets artist by Id", async () => {
       const response = await sendTestRequest(
         gql`
           query Artist($artistId: ID!) {
@@ -186,7 +186,7 @@ describe("Artists module", () => {
     });
   });
 
-  it("deletes band", async () => {
+  it("deletes artist", async () => {
     const response = await removeTestArtist(input.id);
     const result = response?.data?.deleteArtist;
     const errors = response.errors;
