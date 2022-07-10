@@ -7,7 +7,7 @@ import {
   registerTestUser,
 } from "../../users/test/create-test-user";
 import { createTestGenre, removeTestGenre } from "../../genres/test/create-test-genre.js";
-import { testBand } from "./create-test-band.js";
+import { createTestBand, removeTestBand, testBand } from "./create-test-band.js";
 
 describe("Bands module", () => {
   let bandInput = { ...testBand };
@@ -19,8 +19,8 @@ describe("Bands module", () => {
     }
 
     const responceGenre = await createTestGenre();
-    const genreResponce = responceGenre?.data?.createGenre;
-    genreId = genreResponce.id;
+    const genre = responceGenre?.data?.createGenre;
+    genreId = genre.id;
     bandInput.genresIds = [genreId];
   });
   afterAll(async () => {
@@ -28,34 +28,7 @@ describe("Bands module", () => {
   });
 
   it("creates band", async () => {
-    const response = await sendTestRequest(
-      gql`
-        mutation CreateBand($band: CreateBandInput!) {
-          createBand(band: $band) {
-            id
-            name
-            origin
-            members {
-              artist {
-                id
-                firstName
-              }
-              instrument
-              years
-            }
-            website
-            genres {
-              id
-              name
-              description
-              country
-              year
-            }
-          }
-        }
-      `,
-      { variables: { band: testBand }, headers: { Authorization: cachedJwt } }
-    );
+    const response = await createTestBand(bandInput);
 
     const band = response?.data?.createBand;
     const bandId = band?.id;
@@ -190,20 +163,7 @@ describe("Bands module", () => {
   });
 
   it("deletes band", async () => {
-    const response = await sendTestRequest(
-      gql`
-        mutation DeleteBand($deleteBandId: ID!) {
-          deleteBand(id: $deleteBandId) {
-            deletedCount
-            acknowledged
-          }
-        }
-      `,
-      {
-        variables: { deleteBandId: bandInput.id },
-        headers: { Authorization: cachedJwt },
-      }
-    );
+    const response = await removeTestBand(bandInput.id);
     const result = response?.data?.deleteBand;
     const errors = response.errors;
     expect(errors).toBe(undefined);
