@@ -1,32 +1,53 @@
-import { mergeTypeDefs, mergeResolvers } from "@graphql-tools/merge";
+import { mergeResolvers, mergeTypeDefs } from "@graphql-tools/merge";
 
-import { userTypeDefs } from "./users/user.schema.js";
-import { userResolvers } from "./users/user.resolvers.js";
-import { UsersAPI, UserService } from "./users/user.service.js";
+import {
+  userResolvers,
+  UsersAPI,
+  UserService,
+  userTypeDefs,
+} from "./users/users.module.js";
 
-import { bandsTypeDefs } from "./bands/bands.schema.js";
-import { bandsResolvers } from "./bands/bands.resolvers.js";
-import { BandsAPI, BandsService } from "./bands/bands.service.js";
+import {
+  BandsAPI,
+  bandsResolvers,
+  BandsService,
+  bandsTypeDefs,
+} from "./bands/bands.module.js";
 
-import { genresTypeDefs } from "./genres/genres.schema.js";
-import { genresResolvers } from "./genres/genres.resolvers.js";
-import { GenresAPI, GenresService } from "./genres/genres.service.js";
+import {
+  GenresAPI,
+  genresResolvers,
+  GenresService,
+  genresTypeDefs,
+} from "./genres/genres.module.js";
 
-import { artistsTypeDefs } from "./artists/artists.schema.js";
-import { artistsResolvers } from "./artists/artists.resolvers.js";
-import { ArtistsAPI, ArtistsService } from "./artists/artists.service.js";
+import {
+  ArtistsAPI,
+  artistsResolvers,
+  ArtistsService,
+  artistsTypeDefs,
+} from "./artists/artists.module.js";
 
-import { albumsTypeDefs } from "./albums/albums.schema.js";
-import { albumsResolvers } from "./albums/albums.resolvers.js";
-import { AlbumsAPI, AlbumsService } from "./albums/albums.service.js";
+import {
+  AlbumsAPI,
+  albumsResolvers,
+  AlbumsService,
+  albumsTypeDefs,
+} from "./albums/albums.module.js";
 
-import { tracksTypeDefs } from "./tracks/tracks.schema.js";
-import { tracksResolvers } from "./tracks/tracks.resolvers.js";
-import { TracksAPI, TracksService } from "./tracks/tracks.service.js";
+import {
+  TracksAPI,
+  tracksResolvers,
+  TracksService,
+  tracksTypeDefs,
+} from "./tracks/tracks.module.js";
 
-import { favouritesTypeDefs } from "./favourites/favourites.schema.js";
-import { favouritesResolvers } from "./favourites/favourites.resolvers.js";
-import { FavouritesAPI, FavouritesService } from "./favourites/favourites.service.js";
+import {
+  FavouritesAPI,
+  favouritesResolvers,
+  FavouritesService,
+  favouritesTypeDefs,
+} from "./favourites/favourites.module.js";
 
 export const typeDefs = mergeTypeDefs([
   userTypeDefs,
