@@ -16,7 +16,8 @@ GraphQL API service which uses multiple microservices as data source.
    1. Install dependencies `cd ./microservices && npm i`
    2. Create .env files for connecting Mongo with services
    ```bash 
-    for subdir in microservices/*/; do cp $subdir.env.example $subdir.env2; done;
+    cd ./microservices
+    for subdir in */; do cp $subdir.env.example $subdir.env2; done;
     ```
 # Running 
 1. Run data source DB and services:
@@ -25,3 +26,4 @@ GraphQL API service which uses multiple microservices as data source.
 2. Run GraphQL API:
     1. Production mode `npm run start` 
     2. Development mode `npm run start:dev` 
+3. You can run tests with: `npm t`. Tests do not require running GrqphQL backend, just source DB and API.
