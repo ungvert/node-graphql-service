@@ -28,3 +28,21 @@ export async function createTestGenre(genre: any = testGenre) {
   );
   return response;
 }
+
+export async function removeTestGenre(genreId: string) {
+  const response = await sendTestRequest(
+    gql`
+      mutation DeleteGenre($deleteGenreId: ID!) {
+        deleteGenre(id: $deleteGenreId) {
+          acknowledged
+          deletedCount
+        }
+      }
+    `,
+    {
+      variables: { deleteGenreId: genreId },
+      headers: { Authorization: cachedJwt },
+    }
+  );
+  return response;
+}

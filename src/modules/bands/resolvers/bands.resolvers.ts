@@ -28,7 +28,7 @@ export interface Band {
 }
 
 type Member = {
-  name: string;
+  artist: string;
   instrument: string;
   years: string[];
 };
@@ -38,6 +38,11 @@ export const bandsResolvers = {
     id: renameId,
     genres(parent: any, _: undefined, { dataSources }: AppContext) {
       return parent.genresIds.map((id: string) => dataSources.genresAPI.getOne(id));
+    },
+  },
+  Member: {
+    artist(parent: any, _: undefined, { dataSources }: AppContext) {
+      return dataSources.artistsAPI.getOne(parent.artist);
     },
   },
   Query: {

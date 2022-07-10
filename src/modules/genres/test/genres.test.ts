@@ -9,13 +9,52 @@ import {
 import { createTestGenre, testGenre } from "./create-test-genre.js";
 
 describe("Genres module", () => {
+  let genreId: string;
+  beforeAll(async () => {
+    if (!cachedJwt) {
+      await registerTestUser();
+      await loginTestUser();
+    }
+  });
+
+  it("creates genre", async () => {
+    const response = await createTestGenre();
+    const genre = response?.data?.createGenre;
+    const errors = response.errors;
+    expect(errors).toBe(undefined);
+    genreId = genre.id;
+    expect(genreId).toBeTruthy();
+  });
+
+  it("updates genre", async () => {
+    const updatedGenre = { ...testGenre, id: genreId, name: "updated" };
+
+    const response = await sendTestRequest(
+      gql`
+        mutation UpdateGenre($genre: UpdateGenreInput!) {
+          updateGenre(genre: $genre) {
+            id
+            name
+            description
+            country
+            year
+          }
+        }
+      `,
+      { variables: { genre: updatedGenre }, headers: { Authorization: cachedJwt } }
+    );
+    const genre = response?.data?.updateGenre;
+    const errors = response.errors;
+    expect(errors).toBe(undefined);
+    expect(genre).toStrictEqual(updatedGenre);
+  });
+
   describe("without auth", () => {
-    let genreId: string;
     it("gets genres", async () => {
       const response = await sendTestRequest(
         gql`
-          query Genres {
-            genres {
+          query Genres($limit: Int, $offset: Int) {
+            genres(limit: $limit, offset: $offset) {
               items {
                 id
                 name
@@ -28,11 +67,17 @@ describe("Genres module", () => {
               total
             }
           }
-        `
+        `,
+        {
+          variables: {
+            limit: 1,
+            offset: 0,
+          },
+        }
       );
       const genres = response?.data?.genres?.items;
       const errors = response?.errors;
-      expect(errors).toBeFalsy();
+      expect(errors).toBe(undefined);
       expect(genres).toBeTruthy();
 
       genreId = genres[0].id;
@@ -55,71 +100,29 @@ describe("Genres module", () => {
       );
       const genre = response?.data?.genre;
       const errors = response.errors;
-      expect(errors).toBeFalsy();
+      expect(errors).toBe(undefined);
       expect(genre.id).toBeTruthy();
     });
   });
 
-  describe("with auth", () => {
-    let genreId: string;
-    beforeAll(async () => {
-      if (!cachedJwt) {
-        await registerTestUser();
-        await loginTestUser();
-      }
-    });
-
-    it("creates genre", async () => {
-      const response = await createTestGenre();
-      const genre = response?.data?.createGenre;
-      const errors = response.errors;
-      expect(errors).toBeFalsy();
-      genreId = genre.id;
-      expect(genreId).toBeTruthy();
-    });
-
-    it("updates genre", async () => {
-      const updatedGenre = { ...testGenre, id: genreId, name: "updated" };
-
-      const response = await sendTestRequest(
-        gql`
-          mutation UpdateGenre($genre: UpdateGenreInput!) {
-            updateGenre(genre: $genre) {
-              id
-              name
-              description
-              country
-              year
-            }
+  it("deletes genre", async () => {
+    const response = await sendTestRequest(
+      gql`
+        mutation DeleteGenre($deleteGenreId: ID!) {
+          deleteGenre(id: $deleteGenreId) {
+            acknowledged
+            deletedCount
           }
-        `,
-        { variables: { genre: updatedGenre }, headers: { Authorization: cachedJwt } }
-      );
-      const genre = response?.data?.updateGenre;
-      const errors = response.errors;
-      expect(errors).toBeFalsy();
-      expect(genre).toStrictEqual(updatedGenre);
-    });
-
-    it("deletes genre", async () => {
-      const response = await sendTestRequest(
-        gql`
-          mutation DeleteGenre($deleteGenreId: ID!) {
-            deleteGenre(id: $deleteGenreId) {
-              acknowledged
-              deletedCount
-            }
-          }
-        `,
-        {
-          variables: { deleteGenreId: genreId },
-          headers: { Authorization: cachedJwt },
         }
-      );
-      const result = response?.data?.deleteGenre;
-      const errors = response.errors;
-      expect(errors).toBeFalsy();
-      expect(result.deletedCount).toBe(1);
-    });
+      `,
+      {
+        variables: { deleteGenreId: genreId },
+        headers: { Authorization: cachedJwt },
+      }
+    );
+    const result = response?.data?.deleteGenre;
+    const errors = response.errors;
+    expect(errors).toBe(undefined);
+    expect(result.deletedCount).toBe(1);
   });
 });

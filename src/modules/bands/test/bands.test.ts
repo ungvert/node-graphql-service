@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { gql } from "apollo-server-express";
 import { sendTestRequest } from "../../../common/test-utils/send-test-request.js";
 import {
@@ -6,12 +6,106 @@ import {
   loginTestUser,
   registerTestUser,
 } from "../../users/test/create-test-user";
-import { createTestGenre } from "../../genres/test/create-test-genre.js";
+import { createTestGenre, removeTestGenre } from "../../genres/test/create-test-genre.js";
 import { testBand } from "./create-test-band.js";
 
 describe("Bands module", () => {
+  let bandInput = { ...testBand };
+  let genreId: string;
+  beforeAll(async () => {
+    if (!cachedJwt) {
+      await registerTestUser();
+      await loginTestUser();
+    }
+
+    const responceGenre = await createTestGenre();
+    const genreResponce = responceGenre?.data?.createGenre;
+    genreId = genreResponce.id;
+    bandInput.genresIds = [genreId];
+  });
+  afterAll(async () => {
+    await removeTestGenre(genreId);
+  });
+
+  it("creates band", async () => {
+    const response = await sendTestRequest(
+      gql`
+        mutation CreateBand($band: CreateBandInput!) {
+          createBand(band: $band) {
+            id
+            name
+            origin
+            members {
+              artist {
+                id
+                firstName
+              }
+              instrument
+              years
+            }
+            website
+            genres {
+              id
+              name
+              description
+              country
+              year
+            }
+          }
+        }
+      `,
+      { variables: { band: testBand }, headers: { Authorization: cachedJwt } }
+    );
+
+    const band = response?.data?.createBand;
+    const bandId = band?.id;
+
+    const errors = response.errors;
+    expect(errors).toBe(undefined);
+
+    expect(bandId).toBeTruthy();
+    bandInput.id = bandId;
+  });
+
+  it("updates band", async () => {
+    const updatedName = "updated";
+    const updatedBand = { ...bandInput, name: updatedName };
+
+    const response = await sendTestRequest(
+      gql`
+        mutation UpdateBand($band: UpdateBandInput!) {
+          updateBand(band: $band) {
+            id
+            name
+            website
+            origin
+            members {
+              artist {
+                id
+                firstName
+              }
+              instrument
+              years
+            }
+            genres {
+              id
+              name
+              description
+              country
+              year
+            }
+          }
+        }
+      `,
+      { variables: { band: updatedBand }, headers: { Authorization: cachedJwt } }
+    );
+    const band = response?.data?.updateBand;
+    const errors = response.errors;
+    expect(errors).toBe(undefined);
+    expect(band.name).toBe(updatedName);
+  });
+
   describe("without auth", () => {
-    let bandId: string;
     it("gets bands", async () => {
       const response = await sendTestRequest(
         gql`
@@ -22,7 +116,10 @@ describe("Bands module", () => {
                 name
                 origin
                 members {
-                  name
+                  artist {
+                    id
+                    firstName
+                  }
                   instrument
                   years
                 }
@@ -50,10 +147,10 @@ describe("Bands module", () => {
       );
       const bands = response?.data?.bands?.items;
       const errors = response?.errors;
-      expect(errors).toBeFalsy();
+      expect(errors).toBe(undefined);
       expect(bands).toBeTruthy();
 
-      bandId = bands[0].id;
+      const bandId = bands[0].id;
       expect(bandId).toBeTruthy();
     });
     it("gets band by Id", async () => {
@@ -65,7 +162,10 @@ describe("Bands module", () => {
               name
               origin
               members {
-                name
+                artist {
+                  id
+                  firstName
+                }
                 instrument
                 years
               }
@@ -80,120 +180,33 @@ describe("Bands module", () => {
             }
           }
         `,
-        { variables: { bandId } }
+        { variables: { bandId: bandInput.id } }
       );
       const band = response?.data?.band;
       const errors = response.errors;
-      expect(errors).toBeFalsy();
+      expect(errors).toBe(undefined);
       expect(band.id).toBeTruthy();
     });
   });
 
-  describe("with auth", () => {
-    let bandInput = { ...testBand };
-    let genreId: string;
-    beforeAll(async () => {
-      if (!cachedJwt) {
-        await registerTestUser();
-        await loginTestUser();
-      }
-
-      const responceGenre = await createTestGenre();
-      const genreResponce = responceGenre?.data?.createGenre;
-      genreId = genreResponce.id;
-      bandInput.genresIds = [genreId];
-    });
-
-    it("creates band", async () => {
-      const response = await sendTestRequest(
-        gql`
-          mutation CreateBand($band: CreateBandInput!) {
-            createBand(band: $band) {
-              id
-              name
-              origin
-              members {
-                name
-                instrument
-                years
-              }
-              website
-              genres {
-                id
-                name
-                description
-                country
-                year
-              }
-            }
+  it("deletes band", async () => {
+    const response = await sendTestRequest(
+      gql`
+        mutation DeleteBand($deleteBandId: ID!) {
+          deleteBand(id: $deleteBandId) {
+            deletedCount
+            acknowledged
           }
-        `,
-        { variables: { band: testBand }, headers: { Authorization: cachedJwt } }
-      );
-
-      const band = response?.data?.createBand;
-      const bandId = band?.id;
-      expect(bandId).toBeTruthy();
-
-      const errors = response.errors;
-      expect(errors).toBeFalsy();
-      bandInput.id = bandId;
-    });
-
-    it("updates band", async () => {
-      const updatedName = "updated";
-      const updatedBand = { ...bandInput, name: updatedName };
-
-      const response = await sendTestRequest(
-        gql`
-          mutation UpdateBand($band: UpdateBandInput!) {
-            updateBand(band: $band) {
-              id
-              name
-              website
-              origin
-              members {
-                name
-                instrument
-                years
-              }
-              genres {
-                id
-                name
-                description
-                country
-                year
-              }
-            }
-          }
-        `,
-        { variables: { band: updatedBand }, headers: { Authorization: cachedJwt } }
-      );
-      const band = response?.data?.updateBand;
-      const errors = response.errors;
-      expect(errors).toBeFalsy();
-      expect(band.name).toBe(updatedName);
-    });
-
-    it("deletes band  ", async () => {
-      const response = await sendTestRequest(
-        gql`
-          mutation DeleteBand($deleteBandId: ID!) {
-            deleteBand(id: $deleteBandId) {
-              deletedCount
-              acknowledged
-            }
-          }
-        `,
-        {
-          variables: { deleteBandId: bandInput.id },
-          headers: { Authorization: cachedJwt },
         }
-      );
-      const result = response?.data?.deleteBand;
-      const errors = response.errors;
-      expect(errors).toBeFalsy();
-      expect(result.deletedCount).toBe(1);
-    });
+      `,
+      {
+        variables: { deleteBandId: bandInput.id },
+        headers: { Authorization: cachedJwt },
+      }
+    );
+    const result = response?.data?.deleteBand;
+    const errors = response.errors;
+    expect(errors).toBe(undefined);
+    expect(result.deletedCount).toBe(1);
   });
 });
