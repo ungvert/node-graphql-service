@@ -5,7 +5,7 @@ import { cachedJwt } from "../../users/test/create-test-user.js";
 export const testBand = {
   name: "Хуго-Уго",
   origin: "Тольятти",
-  members: [],
+  members: [] as {}[],
   website: "https://xygo-ygo.blogspot.com/",
   genresIds: [] as string[],
   id: undefined,

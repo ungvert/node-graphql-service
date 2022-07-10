@@ -8,10 +8,15 @@ import {
 } from "../../users/test/create-test-user";
 import { createTestGenre, removeTestGenre } from "../../genres/test/create-test-genre.js";
 import { createTestBand, removeTestBand, testBand } from "./create-test-band.js";
+import {
+  createTestArtist,
+  removeTestArtist,
+} from "../../artists/test/create-test-artist.js";
 
 describe("Bands module", () => {
   let bandInput = { ...testBand };
   let genreId: string;
+  let artistId: string;
   beforeAll(async () => {
     if (!cachedJwt) {
       await registerTestUser();
@@ -22,9 +27,21 @@ describe("Bands module", () => {
     const genre = responceGenre?.data?.createGenre;
     genreId = genre.id;
     bandInput.genresIds = [genreId];
+
+    const artistResponce = await createTestArtist();
+    const artist = artistResponce?.data?.createArtist;
+    artistId = artist.id;
+    bandInput.members = [
+      {
+        artist: artistId,
+        instrument: "вокал, гитара",
+        years: ["1990", "1991", "1992"],
+      },
+    ];
   });
   afterAll(async () => {
     await removeTestGenre(genreId);
+    await removeTestArtist(artistId);
   });
 
   it("creates band", async () => {
