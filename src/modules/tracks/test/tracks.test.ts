@@ -5,11 +5,7 @@ import {
   registerTestUser,
 } from "../../users/test/create-test-user";
 import { createTestGenre, removeTestGenre } from "../../genres/test/create-test-genre.js";
-import {
-  createTestBand,
-  removeTestBand,
-  testBand,
-} from "../../bands/test/create-test-band.js";
+import { createTestBand, removeTestBand } from "../../bands/test/create-test-band.js";
 import { createTestTrack, removeTestTrack, testTrack } from "./create-test-track.js";
 import {
   createTestArtist,
@@ -145,13 +141,6 @@ describe("Tracks module", () => {
                   id
                   name
                   released
-                  tracks {
-                    id
-                    title
-                    duration
-                    released
-                  }
-                  image
                 }
                 bands {
                   id
@@ -161,12 +150,6 @@ describe("Tracks module", () => {
                     artist {
                       id
                       firstName
-                      secondName
-                      middleName
-                      birthDate
-                      birthPlace
-                      country
-                      instruments
                     }
                     instrument
                     years

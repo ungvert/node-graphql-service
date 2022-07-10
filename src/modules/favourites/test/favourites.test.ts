@@ -16,13 +16,11 @@ import { createTestTrack, removeTestTrack } from "../../tracks/test/create-test-
 
 describe("Favourites module", () => {
   let input = {
-    userId: "",
     bandId: undefined,
     genreId: undefined,
     artistId: undefined,
     trackId: undefined,
   };
-  let user;
   beforeAll(async () => {
     if (!cachedJwt) {
       await registerTestUser();
@@ -51,7 +49,7 @@ describe("Favourites module", () => {
     await removeTestTrack(input.trackId);
   });
 
-  it.only("adds track,band,genre,artist to favourites", async () => {
+  it("adds track,band,genre,artist to favourites", async () => {
     const response = await sendTestRequest(
       gql`
         mutation AddTrackToFavourites(
@@ -108,7 +106,41 @@ describe("Favourites module", () => {
     ]);
   });
 
-  it.only("removes track,band,genre,artist from favourites", async () => {
+  it("queries users favourites", async () => {
+    const response = await sendTestRequest(
+      gql`
+        query Favourites {
+          favourites {
+            id
+            userId
+            bands {
+              id
+            }
+            genres {
+              id
+            }
+            artists {
+              id
+            }
+            tracks {
+              id
+            }
+          }
+        }
+      `,
+      {
+        headers: { Authorization: cachedJwt },
+      }
+    );
+
+    expect(response.errors).toBe(undefined);
+    expect(response?.data?.favourites?.tracks).toStrictEqual([{ id: input.trackId }]);
+    expect(response?.data?.favourites?.artists).toStrictEqual([{ id: input.artistId }]);
+    expect(response?.data?.favourites?.bands).toStrictEqual([{ id: input.bandId }]);
+    expect(response?.data?.favourites?.genres).toStrictEqual([{ id: input.genreId }]);
+  });
+
+  it("removes track,band,genre,artist from favourites", async () => {
     const response = await sendTestRequest(
       gql`
         mutation RemoveTrackFromFavourites(

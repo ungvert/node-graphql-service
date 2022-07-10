@@ -37,7 +37,10 @@ export const tracksResolvers = {
   Track: {
     id: renameId,
     album(parent: any, _: undefined, { dataSources }: AppContext) {
-      return dataSources.albumsAPI.getOne(parent.albumId);
+      if (!parent?.albumId) {
+        return null;
+      }
+      return dataSources.albumsAPI.getOne(parent?.albumId);
     },
     bands(parent: any, _: undefined, { dataSources }: AppContext) {
       return parent.bandsIds.map((id: string) => dataSources.bandsAPI.getOne(id));
