@@ -19,7 +19,7 @@ import { createTestAlbum, removeTestAlbum } from "../../albums/test/create-test-
 import { sendTestRequest } from "../../../common/test-utils/send-test-request.js";
 import { gql } from "apollo-server-express";
 
-describe.only("Tracks module", () => {
+describe("Tracks module", () => {
   let input = { ...testTrack };
   beforeAll(async () => {
     if (!cachedJwt) {

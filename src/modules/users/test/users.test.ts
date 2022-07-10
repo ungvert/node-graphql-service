@@ -7,14 +7,14 @@ describe("Users module", () => {
   let userId: string;
 
   it("registers user", async () => {
-    const response = await registerTestUser();
-    userId = response?.data?.register?.id;
-    expect(userId).toBeTruthy();
+    const [{ id }, errors] = await registerTestUser();
+    expect(errors).toBe(undefined);
+    expect(id).toBeTruthy();
   });
 
   it("logins and gets jwt", async () => {
-    const response = await loginTestUser();
-    const jwt = response.data?.jwt;
+    const [jwt, errors] = await loginTestUser();
+    expect(errors).toBe(undefined);
     expect(jwt).toBeTruthy();
   });
 
@@ -37,7 +37,7 @@ describe("Users module", () => {
         },
       }
     );
-
+    expect(response.errors).toBe(undefined);
     const user = response.data?.user;
     expect(user.id).toBeTruthy();
   });

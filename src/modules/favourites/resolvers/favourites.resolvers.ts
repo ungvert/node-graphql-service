@@ -70,5 +70,34 @@ export const favouritesResolvers = {
     ) {
       return dataSources.favouritesAPI.add("genres", id);
     },
+
+    removeTrackFromFavourites(
+      _: undefined,
+      { id }: AddToFavouritesArgs,
+      { dataSources }: AppContext
+    ) {
+      return dataSources.favouritesAPI.remove("tracks", id);
+    },
+    removeArtistFromFavourites(
+      _: undefined,
+      { id }: AddToFavouritesArgs,
+      { dataSources }: AppContext
+    ) {
+      return dataSources.favouritesAPI.remove("artists", id);
+    },
+    removeBandFromFavourites(
+      _: undefined,
+      { id }: AddToFavouritesArgs,
+      { dataSources }: AppContext
+    ) {
+      return dataSources.favouritesAPI.remove("bands", id);
+    },
+    removeGenreFromFavourites(
+      _: undefined,
+      { id }: AddToFavouritesArgs,
+      { dataSources }: AppContext
+    ) {
+      return dataSources.favouritesAPI.remove("genres", id);
+    },
   },
 };

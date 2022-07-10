@@ -19,5 +19,10 @@ export const favouritesTypeDefs = gql`
     addArtistToFavourites(id: ID!): Favourites
     addBandToFavourites(id: ID!): Favourites
     addGenreToFavourites(id: ID!): Favourites
+
+    removeTrackFromFavourites(id: ID!): Favourites
+    removeArtistFromFavourites(id: ID!): Favourites
+    removeBandFromFavourites(id: ID!): Favourites
+    removeGenreFromFavourites(id: ID!): Favourites
   }
 `;

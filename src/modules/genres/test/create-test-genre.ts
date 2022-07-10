@@ -29,7 +29,7 @@ export async function createTestGenre(genre: any = testGenre) {
   return response;
 }
 
-export async function removeTestGenre(genreId: string) {
+export async function removeTestGenre(genreId: any) {
   const response = await sendTestRequest(
     gql`
       mutation DeleteGenre($deleteGenreId: ID!) {

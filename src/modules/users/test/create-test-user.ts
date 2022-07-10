@@ -39,7 +39,7 @@ export const registerTestUser = async (): Promise<any> => {
   );
 
   testUser.id = response.data?.register?.id;
-  return response;
+  return [response.data?.register, response?.errors];
 };
 
 export const loginTestUser = async (): Promise<any> => {
@@ -58,5 +58,5 @@ export const loginTestUser = async (): Promise<any> => {
   );
 
   cachedJwt = response.data?.jwt;
-  return response;
+  return [response.data?.jwt, response?.errors];
 };
