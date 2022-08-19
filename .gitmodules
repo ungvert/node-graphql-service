@@ -1,0 +1,3 @@
+[submodule "microservices"]
+	path = microservices
+	url = git@github.com:rolling-scopes-school/node-graphql-service.git

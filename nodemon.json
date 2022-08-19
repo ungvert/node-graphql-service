@@ -1,0 +1,6 @@
+{
+  "ignore": ["*.test.ts", "dist/", "microservices/"],
+  "execMap": {
+    "ts": "ts-node --esm"
+  }
+}
